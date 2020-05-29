@@ -18,22 +18,14 @@ geometry.
 * directly set attributes and uniforms
 * use whatever cartographic projections you want
 * use whatever coordinate systems you want
-* avoids webgl context overload by sharing a single scissored webgl context
 * designed to work with modern frameworks or raw html
 * specifically tested to work with vdom/domdiff libraries (react, choo)
 
-You can have dozens of inline maps on a single page!
-
-Internally mixmap uses [regl][] and [regl-component][] for setting up webgl and
-managing the webgl context. If the webgl context is lost because the root DOM
-nodes are detached from the DOM, mixmap will set everything back to where it was
-when the nodes are inserted back onto the page.
-
-A large part of the mixmap api passes through to the [regl][] API, so it might
-be best to learn [regl][] first.
+Internally mixmap uses [regl][]. A large part of the mixmap api passes
+through to the [regl][] API, so it might be best to learn [regl][]
+first.
 
 [regl]: http://regl.party
-[regl-component]: https://github.com/substack/regl-component
 
 # project status
 
@@ -45,15 +37,6 @@ and many parts are not as optimized as they ought to be.
 This demo uses 3 levels of tiles from [10m-ne2][]
 and renders the population data from [cities1000][] over top.
 There are 138398 cities with over 1000 people, which for webgl is no big deal.
-
-You can view this demo on:
-
-* https://ipfs.io/ipfs/QmTTbHTnijEYYBk4UX6SJVbsL1AjWcN52DwS3D3rH172hv
-* https://substack.neocities.org/mixmap/demos/ne2srw-cities.html
-* dat://81e8ab9b6944e5263ff517be5e9c002446a8a881eff74c1df9ad3fbd6d875da2 (open in [beaker browser][])
-
-To download the public domain tiles for yourself there are many options,
-using [ipfs][], [dat][], or http mirrors:
 
 * `ipfs get -o ne2srw /ipfs/QmV5PLazMsBk8bRhRAyDhNuJt9N19cjayUSDvw8DKxSmFz`
 * `dat clone dat://db9c54fd4775da34109c9afd366cac5d3dff26c6a3902fc9c9c454193b543cbb ne2srw`
@@ -243,7 +226,6 @@ window.addEventListener('keydown', function (ev) {
   }
 })
 
-document.body.appendChild(mix.render())
 document.body.appendChild(map.render({ width: 600, height: 400 }))
 ```
 
@@ -271,21 +253,9 @@ var mixmap = require('mixmap')
 Create a new mixmap instance given a [regl][] interface and some `opts` that
 will be passed to the regl constructor.
 
-There should only be one `mix` instance per-page because this interface creates
-a full-page canvas that the logical sub-canvases for each map is scissored out
-of.
-
-## var element = mix.render()
-
-Return a root html element with a full-screen canvas inside.
-
-This root element can re-establish itself as needed, so it is safe to use with
-virtual dom and dom-diffing libraries: you can call `.render()` whenever your
-state changes.
-
 ## var map = mix.create(opts)
 
-Create a new map instance with a scissored rendering context.
+Create a new map instance.
 
 * `opts.viewbox` - set the viewbox. default: `[-180,-90,+180,+90]`
 * `opts.backgroundColor` - default: `[1,1,1,1]` (white)

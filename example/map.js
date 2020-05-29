@@ -1,12 +1,14 @@
-var mixmap = require('../')
-var regl = require('regl')
-var glsl = require('glslify')
-var resl = require('resl')
+"use strict"
 
-var mix = mixmap(regl, { extensions: ['oes_element_index_uint'] })
-var map = mix.create()
+const mixmap = require('../')
+const regl = require('regl')
+const glsl = require('glslify')
+const resl = require('resl')
 
-var drawTile = map.createDraw({
+const mix = mixmap(regl, { extensions: [ 'oes_element_index_uint' ]})
+const map = mix.create()
+
+const drawTile = map.createDraw({
   frag: glsl`
     precision highp float;
     #pragma glslify: hsl2rgb = require('glsl-hsl2rgb')
@@ -42,67 +44,75 @@ var drawTile = map.createDraw({
   uniforms: {
     id: map.prop('id'),
     zindex: map.prop('zindex'),
-    texture: map.prop('texture')
+    texture: map.prop('texture'),
   },
   attributes: {
     position: map.prop('points'),
-    tcoord: [0,1,0,0,1,1,1,0] // sw,se,nw,ne
+    tcoord: [ 0,1,0,0,1,1,1,0 ], // sw,se,nw,ne
   },
-  elements: [0,1,2,1,2,3],
+  elements: [ 0,1,2,1,2,3 ],
   blend: {
     enable: true,
-    func: { src: 'src alpha', dst: 'one minus src alpha' }
-  }
+    func: {
+      src: 'src alpha',
+      dst: 'one minus src alpha',
+    },
+  },
 })
 
-var manifest = require('./ne2srw/tiles.json')
-var tiles = [ {}, {}, {} ]
-manifest.forEach(function (file,id) {
-  var level = Number(file.split('/')[0])
-  var bbox = file.split('/')[1].replace(/\.jpg$/,'').split('x').map(Number)
+const manifest = require('./ne2srw/tiles.json')
+const tiles = [{}, {}, {}]
+manifest.forEach((file,id) => {
+  const level = Number(file.split('/')[0])
+  const bbox = file.split('/')[1].replace(/\.jpg$/,'').split('x').map(Number)
   tiles[level][id+'!'+file] = bbox
 })
 
 map.addLayer({
-  viewbox: function (bbox, zoom, cb) {
+  viewbox (bbox, zoom, cb) {
     zoom = Math.round(zoom)
     if (zoom < 2) cb(null, tiles[0])
     else if (zoom < 4) cb(null, tiles[1])
     else cb(null, tiles[2])
   },
-  add: function (key, bbox) {
-    var file = key.split('!')[1]
-    var level = Number(file.split('/')[0])
-    var prop = {
+  add (key, bbox) {
+    const file = key.split('!')[1]
+    const level = Number(file.split('/')[0])
+    const prop = {
       id: Number(key.split('!')[0]),
-      key: key,
+      key,
       zindex: 2 + level,
       texture: map.regl.texture(),
       points: [
         bbox[0], bbox[1], // sw
         bbox[0], bbox[3], // se
         bbox[2], bbox[1], // nw
-        bbox[2], bbox[3]  // ne
-      ]
+        bbox[2], bbox[3], // ne
+      ],
     }
     drawTile.props.push(prop)
     map.draw()
     resl({
-      manifest: { tile: { type: 'image', src: 'ne2srw/'+file } },
-      onDone: function (assets) {
+      manifest: {
+        tile: {
+          type: 'image',
+          src: 'ne2srw/'+file,
+        },
+      },
+      onDone: (assets) => {
         prop.texture = map.regl.texture(assets.tile)
         map.draw()
-      }
+      },
     })
   },
-  remove: function (key, bbox) {
-    drawTile.props = drawTile.props.filter(function (p) {
+  remove: (key) => {
+    drawTile.props = drawTile.props.filter((p) => {
       return p.key !== key
     })
-  }
+  },
 })
 
-var drawCities = map.createDraw({
+const drawCities = map.createDraw({
   frag: glsl`
     precision highp float;
     #pragma glslify: hsl2rgb = require('glsl-hsl2rgb')
@@ -135,23 +145,27 @@ var drawCities = map.createDraw({
   `,
   primitive: 'points',
   attributes: {
-    position: map.prop('position')
+    position: map.prop('position'),
   },
-  count: map.prop('count')
+  count: map.prop('count'),
 })
 resl({
   manifest: {
-    cities: { type: 'text', src: 'cities1000.json', parser: JSON.parse }
+    cities: {
+      type: 'text',
+      src: 'cities1000.json',
+      parser: JSON.parse,
+    },
   },
-  onDone: function (assets) {
+  onDone: (assets) => {
     drawCities.props.push({
       position: assets.cities,
-      count: assets.cities.length
+      count: assets.cities.length,
     })
-  }
+  },
 })
 
-window.addEventListener('keydown', function (ev) {
+window.addEventListener('keydown', (ev) => {
   if (ev.code === 'Equal') {
     map.setZoom(Math.min(6,Math.round(map.getZoom()+1)))
   } else if (ev.code === 'Minus') {
@@ -159,5 +173,7 @@ window.addEventListener('keydown', function (ev) {
   }
 })
 
-document.body.appendChild(mix.render())
-document.body.appendChild(map.render({ width: 600, height: 400 }))
+document.body.appendChild(map.render({
+  width: 600,
+  height: 400,
+}))
