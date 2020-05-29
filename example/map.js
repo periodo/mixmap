@@ -1,5 +1,3 @@
-"use strict"
-
 const mixmap = require('../')
 const regl = require('regl')
 const glsl = require('glslify')

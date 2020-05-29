@@ -1,5 +1,3 @@
-"use strict"
-
 const Component = require('./lib/component.js')
 const Map = require('./lib/map.js')
 
