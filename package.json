@@ -6,7 +6,7 @@
     "regl": "^1.6.1",
     "resl": "^1.0.3",
     "glsl-hsl2rgb": "^1.1.0",
-    "glslify": "^7.0.0"
+    "glslify": "^7.1.1"
   },
   "dependencies": {
     "box-intersect": "^1.0.2",
