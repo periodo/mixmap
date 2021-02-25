@@ -3,7 +3,7 @@
   "main": "index.js",
   "description": "interactive webgl mapping library emphasizing direct access to the rendering pipeline",
   "devDependencies": {
-    "regl": "^1.6.1",
+    "regl": "^2.1.0",
     "resl": "^1.0.3",
     "glsl-hsl2rgb": "^1.1.0",
     "glslify": "^7.0.0"
