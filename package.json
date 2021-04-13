@@ -12,7 +12,7 @@
     "box-intersect": "^1.0.2",
     "defined": "^1.0.0",
     "nanobus": "^4.4.0",
-    "nanocomponent": "^6.5.3",
+    "nanocomponent": "^6.6.0",
     "nanohtml": "^1.9.1",
     "on-load": "^4.0.2",
     "sheetify": "^8.0.0"
