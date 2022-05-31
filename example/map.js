@@ -3,8 +3,7 @@ const regl = require('regl')
 const glsl = require('glslify')
 const resl = require('resl')
 
-const mix = mixmap(regl, { extensions: [ 'oes_element_index_uint' ]})
-const map = mix.create()
+const map = mixmap(regl, { extensions: [ 'oes_element_index_uint' ]})
 
 const drawTile = map.createDraw({
   frag: glsl`
