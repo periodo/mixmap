@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "box-intersect": "^1.0.2",
-    "defined": "^1.0.0",
+    "defined": "^1.0.1",
     "nanobus": "^4.5.0",
     "nanocomponent": "^6.6.0",
     "nanohtml": "^1.10.0",
