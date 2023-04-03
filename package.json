@@ -15,7 +15,7 @@
     "nanobus": "^4.5.0",
     "nanocomponent": "^6.6.0",
     "nanohtml": "^1.10.0",
-    "on-load": "^4.0.2",
+    "on-load": "^5.0.0",
     "sheetify": "^8.0.0"
   },
   "keywords": [
